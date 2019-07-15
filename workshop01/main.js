@@ -76,7 +76,10 @@ app.get('/information', (req, resp) => {
     //Weather for city is in cityName variable
     //API key is in keys.weather
     const params = {
-    }
+        q: cityName,
+        units: 'metric',
+        appid: keys.weather
+    };
 
     getWeather(params)
         .then(result => {
