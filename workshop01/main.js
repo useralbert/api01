@@ -90,6 +90,9 @@ app.get('/information', (req, resp) => {
             //The 2 character country code is found in countryCode variable
             //API key is in keys.news
             const params = {
+                country: countryCode,
+                category: "technology",
+                apiKey: keys.news
             }
             return (Promise.all([ result, getNews(params) ]));
         })
