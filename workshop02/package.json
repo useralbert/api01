@@ -1,7 +1,6 @@
 {
   "name": "workshop02",
   "version": "1.0.0",
-  "description": "",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,6 +11,12 @@
     "compression": "^1.7.4",
     "express": "^4.17.1",
     "express-range": "^2.0.1",
+    "mongo": "^0.1.0",
     "mongodb": "^3.2.7"
-  }
+  },
+  "devDependencies": {},
+  "keywords": [
+    "main.js"
+  ],
+  "description": ""
 }
