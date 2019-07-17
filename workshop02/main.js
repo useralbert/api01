@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 // TODO GET /api/states
 app.get('/api/states', 
     (req, resp) => {
-
+		//console.log(req.params);  not supported
         // Content-Type: appliction/json
         resp.type('application/json')
 
@@ -52,7 +52,7 @@ app.get('/api/states',
 
 app.get('/api/state/:state', 
     (req, resp) => {
-        const stateAbbrev = req.params.state;
+		const stateAbbrev = req.params.state;
         resp.type('application/json')
         db.findAllStates()
             .then(result => {
@@ -81,10 +81,55 @@ app.get('/api/state/:state',
 
 
 // TODO GET /api/city/:cityId
-
+app.get('/api/city/:cityId',
+    (req, resp) => {
+        resp.type('application/json');
+        db.findCityById(req.params.cityId)
+            .then(result => {
+                if (result.length > 0) {
+                    resp.status(200)
+                    resp.json(result[0]);
+                    return
+                }
+                resp.status(404);
+                resp.json({ error: `City not found: ${req.params.cityId}`})
+            })
+            .catch(error => {
+                resp.status(400);
+                resp.json({ error: error});
+            })
+    }
+);
 
 
 // TODO POST /api/city
+// Content-Type: application/json
+/*
+    {
+    "city" : "BARRE",
+    "loc" : [ 
+        -72.108354, 
+        42.409698
+    ],
+    "pop" : 4546,
+    "state" : "MA"
+}
+*/
+app.post('/api/city', 
+    (req, resp) => {
+        const newCity = req.body;
+        resp.type('application/json')
+        db.insertCity(newCity)
+            .then(result => {
+                resp.status(201)
+                resp.json(result);
+            })
+            .catch(error => {
+                resp.status(400);
+                resp.json({ error: error});
+            })
+    }
+)
 
 
 
