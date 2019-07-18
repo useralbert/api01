@@ -139,6 +139,7 @@ app.get('/api/city/:cityId',
     "state" : "MA"
 }
 */
+
 app.post('/api/city', 
     schemaValidator.validate({ body: citySchema }),
     (req, resp) => {
@@ -155,7 +156,6 @@ app.post('/api/city',
             })
     }
 )
-
 // End of workshop
 
 app.get('/health', (req, resp) => {
