@@ -20,9 +20,8 @@ const express = require('express')
 const CitiesDB = require('./citiesdb');
 
 const serviceId = uuid().substring(0, 8);
-const serviceName = 'zips';
 //const serviceName = `zips-${serviceId}`
-
+const serviceName = 'zips';
 //Load application keys
 //Rename _keys.json file to keys.json
 const keys = require('./keys.json')
@@ -48,23 +47,25 @@ app.use(express.urlencoded({ extended: true }));
 
 // Start of workshop
 
+// TODO 1/3 Load schemans
+
+//Loading the schema file
 const citySchema = require('./schema/city-schema.json');
 
-// new OpenAPIValidator({ 
-//     apiSpecPath: join(__dirname, 'schema', 'city-api.yaml')
-// }).install(app)
+/*new OpenAPIValidator({ 
+    apiSpecPath: join(__dirname, 'schema', 'city-api.yaml')
+}).install(app)*/
 
-// Start of workshop
-// TODO 2/2 Copy your routes from workshop02 here
+
+// TODO 2/3 Copy your routes from workshop03 here
 
 // Mandatory workshop
 // TODO GET /api/states
 app.get('/api/states', 
-    cacheControl({ maxAge: 30, private: false }),
+
+	cacheControl({maxAge: 30, private: false}),
     (req, resp) => {
-
-        console.info('**** GET LIST OF STATES ', new Date())
-
+		console.info('****get list of states', new Date())
         // Content-Type: appliction/json
         resp.type('application/json')
 
@@ -156,6 +157,19 @@ app.post('/api/city',
     }
 )
 
+// Optional workshop
+// TODO HEAD /api/state/:state
+
+
+// TODO GET /state/:state/count
+
+
+
+// TODO GET /city/:name
+
+
+
+
 // End of workshop
 
 app.get('/health', (req, resp) => {
@@ -185,28 +199,30 @@ db.getDB()
 			console.info(`\tService id: ${serviceId}`);
 
 			// TODO 3/3 Add service registration here
-            consul.agent.service.register({
-                id: serviceId,
-                name: serviceName, 
-                port: PORT, 
-                check: {
-                    // http: `http://localhost:${PORT}/health`,
-                    // interval: '5s',
-                    'ttl': '5s',
-                    deregistercriticalserviceafter: '10s'
-                }
-            })
+			consul.agent.service.register({
+				id: serviceId,
+				name: serviceName,
+				port: PORT, 
+				check: {
+					//http: `//http:localhost: ${PORT/health}`,
+					//interval: '10s',
+					tts: '5s',
+					deregistercriticalserviceafter: '30s'
+				}
+			})
+			//Heartbeat
+			setInterval(
+				( ) => {
+					consul.agent.check.pass({
+						id: `serviceid:${serviceId}`
+					})
+				},
+				5000 //time
+			)
 
-            //Heartbeat
-            setInterval(
-                () => {
-                    console.info(serviceId, ': heartbeat:', new Date());
-                    consul.agent.check.pass({
-                        id: `service:${serviceId}`
-                    })
-                },
-                5000 //time
-            )
+
+
+
 		});
 	})
 	.catch(error => {
