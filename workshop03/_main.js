@@ -77,6 +77,7 @@ app.use(express.urlencoded({ extended: true }));
 // TODO 1/2 Load schemans
 
 //Loading the schema file
+
 const citySchema = require('./schema/city-schema.json');
 
 new OpenAPIValidator({ 
